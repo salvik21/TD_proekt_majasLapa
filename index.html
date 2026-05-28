@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="lv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mana studiju nedēļa datorikā</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-layout">
+      <a class="brand" href="#sakums" aria-label="Uz sākumu">
+        <span class="brand-mark">ED</span>
+        <span>
+          <strong>Studenta dienasgrāmata</strong>
+          <small>Datorikas nedēļa</small>
+        </span>
+      </a>
+
+      <nav class="main-nav" aria-label="Galvenā navigācija">
+        <ul id="nav-list"></ul>
+      </nav>
+
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
+        Tumšā tēma
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="sakums" aria-labelledby="hero-title">
+      <img class="hero-image" src="images/hero.jpg" alt="Studenta darba galds ar klēpjdatoru, pierakstiem un mācību materiāliem">
+      <div class="hero-content container">
+        <p class="eyebrow">Elektroniskā studenta dienasgrāmata</p>
+        <h1 id="hero-title">Mana studiju nedēļa datorikā</h1>
+        <p class="hero-subtitle">Elektroniskā studenta dienasgrāmata</p>
+        <p class="author">Autors: Vjačeslavs Lubimovs</p>
+      </div>
+    </section>
+
+    <section class="intro container" aria-labelledby="intro-title">
+      <div>
+        <p class="eyebrow">Nedēļas pārskats</p>
+        <h2 id="intro-title">Piecas dienas, piecas mācību situācijas</h2>
+      </div>
+      <p>
+        Šajā lapā apkopota datorikas studenta darba nedēļa: lekcijas, praktiskie darbi,
+        semināri, patstāvīgā mācīšanās un īsa refleksija par katru dienu.
+      </p>
+    </section>
+
+    <section class="work-schedule container" id="dzimsanas-dienas" aria-labelledby="birthdays-title">
+      <div class="section-heading">
+        <p class="eyebrow">Draugu kalendārs</p>
+        <h2 id="birthdays-title">Tuvākās dzimšanas dienas</h2>
+        <p>
+          Šeit var ātri pārbaudīt, kuriem draugiem drīz būs dzimšanas diena,
+          lai laikus sagatavotu apsveikumu.
+        </p>
+      </div>
+      <div id="birthday-cards" class="schedule-cards"></div>
+    </section>
+
+    <section class="diary container" id="dienasgramata" aria-label="Studiju nedēļas dienas">
+      <div id="cards" class="cards"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 Vjačeslavs Lubimovs. Mācību projekts elektroniskai studenta dienasgrāmatai.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
