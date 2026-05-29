@@ -427,6 +427,67 @@ a {
   color: var(--muted);
 }
 
+.recommendation-target,
+.recommendation-empty {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.93rem;
+  font-weight: 700;
+}
+
+.recommendation-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  padding: 10px;
+}
+
+.recommendation-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 6px 8px 6px 10px;
+}
+
+.recommendation-pill.is-best {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 8px 22px rgba(47, 111, 85, 0.18);
+}
+
+.recommendation-pill.is-best::before {
+  content: "Tagad";
+  color: var(--accent-strong);
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.recommendation-pill strong {
+  color: var(--accent-strong);
+  font-size: 0.92rem;
+}
+
+.recommendation-pill em {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  min-height: 24px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--surface);
+  font-style: normal;
+  font-weight: 900;
+  font-size: 0.82rem;
+  padding: 2px 7px;
+}
+
 .table-wrap {
   overflow-x: auto;
   border: 1px solid var(--line);

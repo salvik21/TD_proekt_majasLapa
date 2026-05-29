@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeToggle = document.querySelector("#theme-toggle");
   const days = Array.isArray(window.studyDays) ? window.studyDays : [];
   const birthdays = Array.isArray(window.friendBirthdays) ? window.friendBirthdays : [];
+  const transportSchedules = Array.isArray(window.transportSchedules) ? window.transportSchedules : [];
 
   function readSavedTheme() {
     try {
@@ -102,6 +103,106 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
+  function parseTimeToMinutes(timeValue, useEndTime = false) {
+    const parts = timeValue.split("-");
+    const selected = useEndTime && parts[1] ? parts[1] : parts[0];
+    const [hours, minutes] = selected.trim().split(":").map(Number);
+
+    if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+      return null;
+    }
+
+    return hours * 60 + minutes;
+  }
+
+  function formatMinutes(totalMinutes) {
+    const normalized = ((totalMinutes % 1440) + 1440) % 1440;
+    const hours = String(Math.floor(normalized / 60)).padStart(2, "0");
+    const minutes = String(normalized % 60).padStart(2, "0");
+    return `${hours}:${minutes}`;
+  }
+
+  function getDepartures(schedule) {
+    return schedule.departures.flatMap((entry) =>
+      entry.minutes.map((minute) => ({
+        minutes: Number(entry.hour) * 60 + Number(minute),
+        time: `${entry.hour}:${minute}`,
+        routeNumber: schedule.routeNumber,
+        route: schedule.route,
+        stop: schedule.stop
+      }))
+    );
+  }
+
+  function findDepartures(schedules, targetMinutes, windowMinutes) {
+    return schedules
+      .flatMap(getDepartures)
+      .filter((departure) => Math.abs(departure.minutes - targetMinutes) <= windowMinutes)
+      .sort((first, second) => Math.abs(first.minutes - targetMinutes) - Math.abs(second.minutes - targetMinutes));
+  }
+
+  function getCurrentMinutes() {
+    const now = new Date();
+    return now.getHours() * 60 + now.getMinutes();
+  }
+
+  function getClosestNowIndex(departures) {
+    const currentMinutes = getCurrentMinutes();
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+
+    departures.forEach((departure, index) => {
+      const distance = Math.abs(departure.minutes - currentMinutes);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    return closestIndex;
+  }
+
+  function isStudyRoute(schedule) {
+    return schedule.walkToStop && schedule.direction === "Darba dienas";
+  }
+
+  function isInstituteHomeRoute(schedule) {
+    return schedule.direction.includes("no institūta uz mājām");
+  }
+
+  function isWorkHomeRoute(schedule) {
+    return schedule.direction.includes("no darba");
+  }
+
+  function createTransportRecommendationBlock(title, targetText, departures) {
+    if (!departures || departures.length === 0) {
+      return `
+        <div class="day-block">
+          <h3>${title}</h3>
+          <p class="recommendation-empty">${targetText}: nav atrasts piemērots transports.</p>
+        </div>
+      `;
+    }
+
+    const closestNowIndex = getClosestNowIndex(departures);
+    const items = departures.map((departure, index) => `
+      <span class="recommendation-pill ${index === closestNowIndex ? "is-best" : ""}">
+        <strong>${departure.time}</strong>
+        <em>${departure.routeNumber}</em>
+      </span>
+    `).join("");
+
+    return `
+      <div class="day-block">
+        <h3>${title}</h3>
+        <p class="recommendation-target">${targetText}</p>
+        <div class="recommendation-list" aria-label="${title}">
+          ${items}
+        </div>
+      </div>
+    `;
+  }
+
   function createDayCard(day) {
     const section = document.createElement("section");
     section.className = "diary-card";
@@ -124,15 +225,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (hasStudy) {
-      timeline += createTableBlock("Transports uz studijām", `${day.title} transports uz studijām`, day.transportToStudy);
+      if (day.transportToStudy && day.transportToStudy.length > 0) {
+        const firstStudyStart = parseTimeToMinutes(day.study[0].time);
+        const target = firstStudyStart - 45;
+        const departures = findDepartures(transportSchedules.filter(isStudyRoute), target, 10);
+
+        timeline += createTransportRecommendationBlock(
+          "Transports uz studijām",
+          `Mērķis: pieturā ap ${formatMinutes(target)} (45 min pirms lekcijas)`,
+          departures
+        );
+      }
+
       timeline += createTableBlock("Studiju grafiks", `${day.title} studiju grafiks`, day.study);
-      timeline += createTableBlock("Transports no universitātes uz mājām", `${day.title} transports no universitātes uz mājām`, day.transportStudyHome);
+
+      if (day.transportStudyHome && day.transportStudyHome.length > 0) {
+        const lastStudyEnd = parseTimeToMinutes(day.study[day.study.length - 1].time, true);
+        const departures = findDepartures(transportSchedules.filter(isInstituteHomeRoute), lastStudyEnd, 15);
+
+        timeline += createTransportRecommendationBlock(
+          "Transports no institūta uz mājām",
+          `Mērķis: ap ${formatMinutes(lastStudyEnd)} (±15 min pēc nodarbībām)`,
+          departures
+        );
+      }
     }
 
     if (hasWork) {
       timeline += createTableBlock("Transports uz darbu", `${day.title} transports uz darbu`, day.transportToWork);
       timeline += createTableBlock("Darba grafiks", `${day.title} darba grafiks`, day.work);
-      timeline += createTableBlock("Transports no darba uz mājām", `${day.title} transports no darba uz mājām`, day.transportWorkHome);
+
+      const workEnd = parseTimeToMinutes(day.work[day.work.length - 1].time, true);
+      const departures = findDepartures(transportSchedules.filter(isWorkHomeRoute), workEnd, 30);
+
+      timeline += createTransportRecommendationBlock(
+        "Transports no darba uz mājām",
+        `Mērķis: ap ${formatMinutes(workEnd)} (±30 min pēc darba)`,
+        departures
+      );
     }
 
     section.innerHTML = `
