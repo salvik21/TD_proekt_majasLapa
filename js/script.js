@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const themeToggle = document.querySelector("#theme-toggle");
   const days = Array.isArray(window.studyDays) ? window.studyDays : [];
   const birthdays = Array.isArray(window.friendBirthdays) ? window.friendBirthdays : [];
+  const birthdayTrackingDays = 5;
   const transportSchedules = Array.isArray(window.transportSchedules) ? window.transportSchedules : [];
 
   function readSavedTheme() {
@@ -313,10 +314,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return `Pēc ${daysLeft} dienām`;
   }
 
-  function createBirthdayCard(item) {
+  function createBirthdayCard(item, birthday = getBirthdayInfo(item.date)) {
     const article = document.createElement("article");
     article.className = "schedule-card birthday-card";
-    const birthday = getBirthdayInfo(item.date);
 
     article.innerHTML = `
       <div class="schedule-card-body">
@@ -331,9 +331,36 @@ document.addEventListener("DOMContentLoaded", () => {
     return article;
   }
 
+  function createBirthdayEmptyCard() {
+    const article = document.createElement("article");
+    article.className = "schedule-card birthday-card birthday-empty";
+
+    article.innerHTML = `
+      <div class="schedule-card-body">
+        <p class="card-label">Dzimšanas dienas</p>
+        <h3>Nav tuvāko datumu</h3>
+        <p>Tuvākajās ${birthdayTrackingDays} dienās draugu dzimšanas dienas nav atrastas.</p>
+      </div>
+    `;
+
+    return article;
+  }
+
   function renderBirthdayCards() {
     const fragment = document.createDocumentFragment();
-    birthdays.forEach((item) => fragment.append(createBirthdayCard(item)));
+    const upcomingBirthdays = birthdays
+      .map((item) => ({ item, birthday: getBirthdayInfo(item.date) }))
+      .filter(({ birthday }) => birthday.daysLeft <= birthdayTrackingDays)
+      .sort((first, second) => first.birthday.daysLeft - second.birthday.daysLeft);
+
+    if (upcomingBirthdays.length === 0) {
+      fragment.append(createBirthdayEmptyCard());
+    } else {
+      upcomingBirthdays.forEach(({ item, birthday }) => {
+        fragment.append(createBirthdayCard(item, birthday));
+      });
+    }
+
     birthdayContainer.append(fragment);
   }
 

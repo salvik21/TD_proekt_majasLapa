@@ -1,33 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800;900&display=swap");
+
 :root {
   color-scheme: light;
-  --bg: #f3f6f1;
+  --bg: #f3f4f6;
   --surface: #ffffff;
-  --surface-soft: #e9f0e6;
-  --text: #17201a;
-  --muted: #607064;
-  --line: #d8e0d6;
-  --accent: #2f6f55;
-  --accent-strong: #244f41;
-  --accent-soft: #dbeade;
-  --warning: #b56b2d;
-  --shadow: 0 18px 45px rgba(25, 47, 35, 0.12);
+  --surface-soft: #e5e7eb;
+  --text: #111827;
+  --muted: #374151;
+  --line: #9ca3af;
+  --accent: #ef4444;
+  --accent-strong: #111827;
+  --accent-soft: #fee2e2;
+  --warning: #ef4444;
+  --shadow: 0 18px 45px rgba(17, 24, 39, 0.14);
   --radius: 8px;
   --container: 1120px;
-  --font: Arial, Helvetica, sans-serif;
+  --font: "Open Sans", Arial, Helvetica, sans-serif;
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #111612;
-  --surface: #1a211c;
-  --surface-soft: #202b24;
-  --text: #eef4ed;
-  --muted: #b8c8bb;
-  --line: #344238;
-  --accent: #8ac4a3;
-  --accent-strong: #b9dfc8;
-  --accent-soft: #243b2e;
-  --warning: #e0a66b;
+  --bg: #111827;
+  --surface: #374151;
+  --surface-soft: #1f2937;
+  --text: #f3f4f6;
+  --muted: #e5e7eb;
+  --line: #9ca3af;
+  --accent: #ef4444;
+  --accent-strong: #f3f4f6;
+  --accent-soft: #4b1d24;
+  --warning: #ef4444;
   --shadow: 0 18px 45px rgba(0, 0, 0, 0.32);
 }
 
@@ -55,7 +57,7 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(47, 111, 85, 0.12), transparent 32rem),
+    radial-gradient(circle at top left, rgba(239, 68, 68, 0.10), transparent 32rem),
     var(--bg);
   color: var(--text);
   font-family: var(--font);
@@ -340,6 +342,10 @@ a {
 
 .birthday-card .schedule-card-body {
   width: 100%;
+}
+
+.birthday-empty {
+  grid-column: 1 / -1;
 }
 
 .schedule-card-body {
