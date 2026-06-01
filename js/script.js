@@ -42,13 +42,25 @@ document.addEventListener("DOMContentLoaded", () => {
     saveTheme(theme);
     themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
     themeToggle.textContent = theme === "dark" ? "Gaišā tēma" : "Tumšā tēma";
+    themeToggle.dataset.short = theme === "dark" ? "G" : "T";
   }
 
   function createNav() {
+    const shortDayNames = {
+      pirmdiena: "P",
+      otrdiena: "O",
+      tresdiena: "T",
+      ceturtdiena: "C",
+      piektdiena: "Pk",
+      sestdiena: "S",
+      svetdiena: "Sv"
+    };
+
     const homeItem = document.createElement("li");
     const homeLink = document.createElement("a");
     homeLink.href = "#sakums";
     homeLink.textContent = "Sākums";
+    homeLink.dataset.short = "Sāk";
     homeItem.append(homeLink);
     navList.append(homeItem);
 
@@ -56,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const birthdayLink = document.createElement("a");
     birthdayLink.href = "#dzimsanas-dienas";
     birthdayLink.textContent = "Dzimšanas dienas";
+    birthdayLink.dataset.short = "Dz";
     birthdayItem.append(birthdayLink);
     navList.append(birthdayItem);
 
@@ -64,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const link = document.createElement("a");
       link.href = `#${day.id}`;
       link.textContent = day.title;
+      link.dataset.short = shortDayNames[day.id] || day.title;
       if (day.id === currentDayId) {
         link.classList.add("is-today");
         link.setAttribute("aria-label", `${day.title}, šodiena`);
