@@ -728,11 +728,11 @@ th {
 
 @media (max-width: 380px) {
   .header-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .theme-toggle {
-    justify-self: start;
+    justify-self: end;
   }
 
   .main-nav ul {
