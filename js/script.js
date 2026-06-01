@@ -72,6 +72,14 @@ document.addEventListener("DOMContentLoaded", () => {
     birthdayItem.append(birthdayLink);
     navList.append(birthdayItem);
 
+    const aboutItem = document.createElement("li");
+    const aboutLink = document.createElement("a");
+    aboutLink.href = "#par-projektu";
+    aboutLink.textContent = "Par projektu";
+    aboutLink.dataset.short = "Par";
+    aboutItem.append(aboutLink);
+    navList.append(aboutItem);
+
     days.forEach((day) => {
       const item = document.createElement("li");
       const link = document.createElement("a");
@@ -389,6 +397,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sections = [
       document.querySelector("#sakums"),
       document.querySelector("#dzimsanas-dienas"),
+      document.querySelector("#par-projektu"),
       ...days.map((day) => document.querySelector(`#${day.id}`))
     ];
 
