@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cardsContainer = document.querySelector("#cards");
   const birthdayContainer = document.querySelector("#birthday-cards");
   const themeToggle = document.querySelector("#theme-toggle");
+  const themeToggleLabel = document.querySelector("#theme-toggle-label");
   const days = Array.isArray(window.studyDays) ? window.studyDays : [];
   const birthdays = Array.isArray(window.friendBirthdays) ? window.friendBirthdays : [];
   const birthdayTrackingDays = 5;
@@ -41,8 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.documentElement.dataset.theme = theme;
     saveTheme(theme);
     themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
-    themeToggle.textContent = theme === "dark" ? "Gaišā tēma" : "Tumšā tēma";
-    themeToggle.dataset.short = theme === "dark" ? "G" : "T";
+    themeToggle.setAttribute(
+      "aria-label",
+      theme === "dark" ? "Pārslēgt gaišo tēmu" : "Pārslēgt tumšo tēmu"
+    );
+    themeToggleLabel.textContent = theme === "dark" ? "Gaišā tēma" : "Tumšā tēma";
   }
 
   function createNav() {

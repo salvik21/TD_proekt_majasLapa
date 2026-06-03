@@ -21,8 +21,13 @@
         <ul id="nav-list"></ul>
       </nav>
 
-      <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">
-        Tumšā tēma
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Pārslēgt tumšo tēmu">
+        <span class="theme-toggle-track" aria-hidden="true">
+          <span class="theme-toggle-icon theme-toggle-sun">☀</span>
+          <span class="theme-toggle-icon theme-toggle-moon">☾</span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+        <span class="sr-only" id="theme-toggle-label">Tumšā tēma</span>
       </button>
     </div>
   </header>
