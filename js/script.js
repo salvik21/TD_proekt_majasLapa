@@ -152,13 +152,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return hours * 60 + minutes;
   }
 
-  function formatMinutes(totalMinutes) {
-    const normalized = ((totalMinutes % 1440) + 1440) % 1440;
-    const hours = String(Math.floor(normalized / 60)).padStart(2, "0");
-    const minutes = String(normalized % 60).padStart(2, "0");
-    return `${hours}:${minutes}`;
-  }
-
   function getDepartures(schedule) {
     return schedule.departures.flatMap((entry) =>
       entry.minutes.map((minute) => ({
@@ -190,12 +183,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return schedule.direction.includes("no darba");
   }
 
-  function createTransportRecommendationBlock(title, targetText, departures) {
+  function createTransportRecommendationBlock(title, departures) {
     if (!departures || departures.length === 0) {
       return `
         <div class="day-block">
           <h3>${title}</h3>
-          <p class="recommendation-empty">${targetText}: nav atrasts piemērots transports.</p>
+          <p class="recommendation-empty">Nav atrasts piemērots transports.</p>
         </div>
       `;
     }
@@ -210,7 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return `
       <div class="day-block">
         <h3>${title}</h3>
-        <p class="recommendation-target">${targetText}</p>
         <div class="transport-legend" aria-label="Transporta krāsu apzīmējumi">
           <span><i class="route-yellow" aria-hidden="true"></i> autobuss</span>
           <span><i class="route-blue" aria-hidden="true"></i> trolejbuss</span>
@@ -490,7 +482,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         timeline += createTransportRecommendationBlock(
           "Transports uz studijām",
-          `Mērķis: pieturā ap ${formatMinutes(target)} (45 min pirms lekcijas)`,
           departures
         );
       }
@@ -503,7 +494,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         timeline += createTransportRecommendationBlock(
           "Transports no institūta uz mājām",
-          `Mērķis: ap ${formatMinutes(lastStudyEnd)} (±15 min pēc nodarbībām)`,
           departures
         );
       }
@@ -517,7 +507,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         timeline += createTransportRecommendationBlock(
           "Transports uz darbu",
-          `Mērķis: pieturā ap ${formatMinutes(target)} (30 min pirms darba)`,
           departures
         );
       }
@@ -529,7 +518,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       timeline += createTransportRecommendationBlock(
         "Transports no darba uz mājām",
-        `Mērķis: ap ${formatMinutes(workEnd)} (±30 min pēc darba)`,
         departures
       );
     }

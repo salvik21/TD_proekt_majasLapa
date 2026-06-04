@@ -521,8 +521,7 @@ a {
   padding-block: 18px 60px;
 }
 
-.project-description,
-.about-project {
+.project-description {
   display: grid;
   grid-template-columns: minmax(240px, 0.72fr) 1fr;
   gap: 28px;
@@ -531,8 +530,7 @@ a {
   padding-block: 8px 56px;
 }
 
-.project-description h2,
-.about-project h2 {
+.project-description h2 {
   margin: 0;
   font-size: clamp(1.55rem, 3vw, 2.15rem);
   line-height: 1.1;
@@ -551,19 +549,6 @@ a {
 
 .project-description-text p + p {
   margin-top: 16px;
-}
-
-.about-project p:last-child {
-  margin: 0;
-  border-left: 4px solid var(--accent);
-  background: var(--surface);
-  color: var(--muted);
-  padding: 18px 20px;
-}
-
-.about-project a {
-  color: var(--accent);
-  font-weight: 800;
 }
 
 .cards {
@@ -646,7 +631,6 @@ a {
   color: var(--muted);
 }
 
-.recommendation-target,
 .recommendation-empty {
   margin: 0 0 8px;
   color: var(--muted);
@@ -884,6 +868,17 @@ th {
   margin: 0;
 }
 
+.footer-materials {
+  margin-top: 6px !important;
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+
+.footer-materials a {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 :focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
@@ -906,6 +901,10 @@ th {
 }
 
 @media (max-width: 920px) {
+  .floating-task-progress {
+    display: none;
+  }
+
   .header-layout {
     grid-template-columns: 1fr auto;
     padding-block: 12px;
@@ -927,7 +926,6 @@ th {
 
   .intro,
   .project-description,
-  .about-project,
   .diary-card {
     grid-template-columns: 1fr;
   }
