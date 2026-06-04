@@ -2,10 +2,10 @@ window.studyDays = [
   {
     id: "pirmdiena",
     title: "Pirmdiena",
-    subtitle: "Lekcijas, transports un vakara darbs",
+    subtitle: "Lekcijas un transports",
     imageCaption: "Smags pirmdienas rīts",
     image: "images/pirm.jpg",
-    alt: "Pirmdienas mācību galds ar pierakstu kladi un datoru",
+    alt: "Noguris Braians Grifins ar kafijas tasi",
     transportToStudy: [
       { time: "07:35", activity: "Autobuss līdz centram" },
       { time: "08:05", activity: "Trolejbuss līdz universitātei" },
@@ -16,23 +16,15 @@ window.studyDays = [
       { time: "15:35", activity: "Trolejbuss no universitātes uz centru" },
       { time: "16:05", activity: "Autobuss no centra uz mājām" }
     ],
-    transportToWork: [
-      { time: "16:20", activity: "Autobuss no mājām uz darbu" },
-      { time: "16:45", activity: "Ierašanās darbā" }
-    ],
+    transportToWork: [],
     study: [
       { time: "10:30-12:10", activity: "ORACLE projektēšanas rīki, 345. telpa, Raiņa bulvāris 19 - 001" },
       { time: "12:30-14:10", activity: "ORACLE projektēšanas rīki, 345. telpa, Raiņa bulvāris 19 - 001" },
       { time: "16:30-18:05", activity: "DBPS Oracle, 14. aud., Raiņa bulvāris 19 - 001" },
       { time: "18:15-19:45", activity: "DBPS Oracle, 345. telpa, Raiņa bulvāris 19 - 001" }
     ],
-    work: [
-      { time: "17:00-21:00", activity: "Darbs pēc studijām" }
-    ],
-    transportWorkHome: [
-      { time: "21:10", activity: "Autobuss no darba uz mājām" },
-      { time: "21:40", activity: "Ierašanās mājās" }
-    ]
+    work: [],
+    transportWorkHome: []
   },
   {
     id: "otrdiena",
@@ -40,7 +32,7 @@ window.studyDays = [
     subtitle: "Algoritmi un brīvs vakars",
     imageCaption: "Otrdiena bez kafijas nav dzīvojama",
     image: "images/otrdiena.jpg",
-    alt: "Datora ekrāns ar koda redaktoru un algoritma pierakstiem",
+    alt: "Mierīgs un nopietns Braians Grifins",
     transportToStudy: [
       { time: "07:50", activity: "Autobuss no mājām" },
       { time: "08:18", activity: "Pārsēšanās uz trolejbusu" },
@@ -64,7 +56,7 @@ window.studyDays = [
     subtitle: "Tīmekļa dizains un kultūras vēsture",
     imageCaption: "Trešdiena jau pusceļā uz nedēļas nogali",
     image: "images/tresd.jpg",
-    alt: "Pieraksti ar datubāzes tabulu shēmu blakus klēpjdatoram",
+    alt: "Noguris Braians Grifins turpina darbu",
     transportToStudy: [
       { time: "07:40", activity: "Autobuss līdz centram" },
       { time: "08:05", activity: "Trolejbuss līdz universitātei" },
@@ -92,7 +84,7 @@ window.studyDays = [
     subtitle: "Attālinātas studijas no mājām un darba maiņa",
     imageCaption: "Ceturtdiena, gandrīz piektdiena",
     image: "images/ceturdien.jpg",
-    alt: "Tīmekļa lapas makets ar HTML un CSS pierakstiem",
+    alt: "Priecīgs Braians Grifins",
     transportToStudy: [],
     transportStudyHome: [],
     transportToWork: [],
@@ -109,7 +101,7 @@ window.studyDays = [
     subtitle: "Darba diena bez studijām",
     imageCaption: "Piektdiena = brīvdienu priekšnojauta",
     image: "images/piekd.jpg",
-    alt: "Piektdienas kopsavilkuma pieraksti un atvērts klēpjdators",
+    alt: "Priecīgs Braians Grifins dejo ar glāzi",
     transportToStudy: [],
     transportStudyHome: [],
     transportToWork: [
@@ -131,7 +123,7 @@ window.studyDays = [
     subtitle: "Darba diena bez studijām",
     imageCaption: "Sestdiena - atpūtas diena",
     image: "images/sesd.jpg",
-    alt: "Sestdienas darba grafika attēls ar pierakstiem",
+    alt: "Braians Grifins atpūšas uz dīvāna",
     transportToStudy: [],
     transportStudyHome: [],
     transportToWork: [
@@ -153,7 +145,7 @@ window.studyDays = [
     subtitle: "Darba maiņa un sagatavošanās jaunai nedēļai",
     imageCaption: "Svētdiena - sagatavošanās pirmdienai",
     image: "images/svetdie.jpg",
-    alt: "Svētdienas darba grafika attēls ar klēpjdatoru",
+    alt: "Skumjš un domīgs Braians Grifins",
     transportToStudy: [],
     transportStudyHome: [],
     transportToWork: [
@@ -171,32 +163,36 @@ window.studyDays = [
   }
 ];
 
-window.friendBirthdays = [
-  {
-    id: "anna",
-    name: "Anna",
-    date: "06-03",
-    note: "Kursa biedrene no programmēšanas nodarbībām.",
-    image: "images/schedule1.jpg",
-    alt: "Dzimšanas dienas atgādinājuma kartīte Annai"
-  },
-  {
-    id: "maksims",
-    name: "Maksims",
-    date: "06-12",
-    note: "Draugs, ar kuru bieži strādāju pie praktiskajiem uzdevumiem.",
-    image: "images/schedule2.jpg",
-    alt: "Dzimšanas dienas atgādinājuma kartīte Maksimam"
-  },
-  {
-    id: "elina",
-    name: "Elīna",
-    date: "06-21",
-    note: "Draudzene, kurai jānosūta apsveikums pirms nodarbībām.",
-    image: "images/schedule3.jpg",
-    alt: "Dzimšanas dienas atgādinājuma kartīte Elīnai"
-  }
-];
+window.dayTasks = {
+  pirmdiena: [
+    { id: "oracle-praktiskais-darbs", type: "homework", title: "ORACLE praktiskais darbs" },
+    { id: "dbps-oracle", type: "test", title: "Sagatavoties DBPS Oracle" },
+    { id: "lekcijas-materiali", type: "homework", title: "Pārskatīt lekcijas materiālus" }
+  ],
+  otrdiena: [
+    { id: "programmesanas-uzdevums", type: "homework", title: "Izpildīt programmēšanas uzdevumu" },
+    { id: "lekcijas-konspekts", type: "homework", title: "Pārskatīt lekcijas konspektu" }
+  ],
+  tresdiena: [
+    { id: "sagatavosanas-testam", type: "test", title: "Sagatavošanās testam" },
+    { id: "praktiskais-darbs", type: "homework", title: "Pabeigt praktisko darbu" }
+  ],
+  ceturtdiena: [
+    { id: "atkartot-teoriju", type: "homework", title: "Atkārtot teoriju" },
+    { id: "tests-seminara", type: "test", title: "Neliels tests seminārā" }
+  ],
+  piektdiena: [
+    { id: "iesniegt-nedelas-darbu", type: "homework", title: "Iesniegt nedēļas darbu" },
+    { id: "sakartot-pierakstus", type: "homework", title: "Sakārtot pierakstus" }
+  ],
+  sestdiena: [
+    { id: "pabeigt-uzdevumus", type: "homework", title: "Pabeigt neizdarītos uzdevumus" }
+  ],
+  svetdiena: [
+    { id: "sagatavoties-nedelai", type: "homework", title: "Sagatavoties jaunai nedēļai" },
+    { id: "atkartot-temas", type: "test", title: "Atkārtot svarīgākās tēmas" }
+  ]
+};
 
 window.transportSchedules = [
   {

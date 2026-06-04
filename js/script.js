@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
   const navList = document.querySelector("#nav-list");
   const cardsContainer = document.querySelector("#cards");
-  const birthdayContainer = document.querySelector("#birthday-cards");
+  const weekTaskSummary = document.querySelector("#week-task-summary");
   const themeToggle = document.querySelector("#theme-toggle");
   const themeToggleLabel = document.querySelector("#theme-toggle-label");
   const days = Array.isArray(window.studyDays) ? window.studyDays : [];
-  const birthdays = Array.isArray(window.friendBirthdays) ? window.friendBirthdays : [];
-  const birthdayTrackingDays = 5;
+  const dayTasks = window.dayTasks && typeof window.dayTasks === "object" ? window.dayTasks : {};
   const transportSchedules = Array.isArray(window.transportSchedules) ? window.transportSchedules : [];
+  const taskStorageKey = "study-week-completed-tasks";
 
   function readSavedTheme() {
     try {
@@ -25,6 +25,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function readCompletedTasks() {
+    try {
+      return JSON.parse(localStorage.getItem(taskStorageKey)) || {};
+    } catch {
+      return {};
+    }
+  }
+
+  function saveCompletedTasks(tasks) {
+    try {
+      localStorage.setItem(taskStorageKey, JSON.stringify(tasks));
+    } catch {
+      // The task list still works if localStorage is unavailable.
+    }
+  }
+
+  const completedTasks = readCompletedTasks();
   const savedTheme = readSavedTheme();
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const startTheme = savedTheme || (prefersDark ? "dark" : "light");
@@ -67,14 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
     homeLink.dataset.short = "Sāk";
     homeItem.append(homeLink);
     navList.append(homeItem);
-
-    const birthdayItem = document.createElement("li");
-    const birthdayLink = document.createElement("a");
-    birthdayLink.href = "#dzimsanas-dienas";
-    birthdayLink.textContent = "Dzimšanas dienas";
-    birthdayLink.dataset.short = "Dz";
-    birthdayItem.append(birthdayLink);
-    navList.append(birthdayItem);
 
     const aboutItem = document.createElement("li");
     const aboutLink = document.createElement("a");
@@ -168,27 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .sort((first, second) => Math.abs(first.minutes - targetMinutes) - Math.abs(second.minutes - targetMinutes));
   }
 
-  function getCurrentMinutes() {
-    const now = new Date();
-    return now.getHours() * 60 + now.getMinutes();
-  }
-
-  function getClosestNowIndex(departures) {
-    const currentMinutes = getCurrentMinutes();
-    let closestIndex = 0;
-    let closestDistance = Infinity;
-
-    departures.forEach((departure, index) => {
-      const distance = Math.abs(departure.minutes - currentMinutes);
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestIndex = index;
-      }
-    });
-
-    return closestIndex;
-  }
-
   function isStudyRoute(schedule) {
     return schedule.walkToStop && schedule.direction === "Darba dienas";
   }
@@ -211,11 +199,10 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     }
 
-    const closestNowIndex = getClosestNowIndex(departures);
-    const items = departures.map((departure, index) => `
-      <span class="recommendation-pill ${index === closestNowIndex ? "is-best" : ""}">
+    const items = departures.map((departure) => `
+      <span class="recommendation-pill">
         <strong>${departure.time}</strong>
-        <em>${departure.routeNumber}</em>
+        <em class="${["23", "18", "35"].includes(String(departure.routeNumber)) ? "route-blue" : "route-yellow"}">${departure.routeNumber}</em>
       </span>
     `).join("");
 
@@ -228,6 +215,166 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       </div>
     `;
+  }
+
+  function getTaskKey(dayId, taskId) {
+    return `${dayId}:${taskId}`;
+  }
+
+  function getTaskCounts(dayId) {
+    const tasks = dayTasks[dayId] || [];
+    const countType = (type) => {
+      const typeTasks = tasks.filter((task) => task.type === type);
+      const completed = typeTasks.filter((task) => completedTasks[getTaskKey(dayId, task.id)]).length;
+      return { completed, total: typeTasks.length };
+    };
+
+    const totalCompleted = tasks.filter((task) => completedTasks[getTaskKey(dayId, task.id)]).length;
+
+    return {
+      all: { completed: totalCompleted, total: tasks.length },
+      homework: countType("homework"),
+      test: countType("test")
+    };
+  }
+
+  function getWeekTaskCounts() {
+    const dayOrder = days.map((day) => day.id);
+    const tasks = dayOrder.flatMap((dayId) =>
+      (dayTasks[dayId] || []).map((task) => ({ ...task, dayId }))
+    );
+    const homework = tasks.filter((task) => task.type === "homework");
+    const tests = tasks.filter((task) => task.type === "test");
+
+    return {
+      homeworkTotal: homework.length,
+      homeworkRemaining: homework.filter(
+        (task) => !completedTasks[getTaskKey(task.dayId, task.id)]
+      ).length,
+      testsPast: tests.filter(
+        (task) => completedTasks[getTaskKey(task.dayId, task.id)]
+      ).length,
+      testsUpcoming: tests.filter(
+        (task) => !completedTasks[getTaskKey(task.dayId, task.id)]
+      ).length
+    };
+  }
+
+  function renderWeekTaskSummary() {
+    if (!weekTaskSummary) {
+      return;
+    }
+
+    const counts = getWeekTaskCounts();
+    const items = [
+      { label: "Mājasdarbi kopā", value: counts.homeworkTotal },
+      { label: "Mājasdarbi atlikuši", value: counts.homeworkRemaining },
+      { label: "Kontroldarbi bija", value: counts.testsPast },
+      { label: "Kontroldarbi būs", value: counts.testsUpcoming }
+    ];
+
+    weekTaskSummary.innerHTML = items.map((item) => `
+      <div class="week-summary-item">
+        <strong>${item.value}</strong>
+        <span>${item.label}</span>
+      </div>
+    `).join("");
+
+    const floatingHomework = document.querySelector('[data-floating-counter="homework"]');
+    const floatingTests = document.querySelector('[data-floating-counter="test"]');
+
+    if (floatingHomework) {
+      floatingHomework.textContent = `${counts.homeworkTotal - counts.homeworkRemaining}/${counts.homeworkTotal}`;
+    }
+
+    if (floatingTests) {
+      floatingTests.textContent = `${counts.testsPast}/${counts.testsPast + counts.testsUpcoming}`;
+    }
+  }
+
+  function createTaskCounter(label, counterName, count) {
+    return `
+      <span class="task-counter">
+        ${label}: <strong data-task-counter="${counterName}">${count.completed} / ${count.total}</strong>
+      </span>
+    `;
+  }
+
+  function createTasksBlock(day) {
+    const tasks = dayTasks[day.id] || [];
+
+    if (tasks.length === 0) {
+      return "";
+    }
+
+    const counts = getTaskCounts(day.id);
+    const items = tasks.map((task) => {
+      const taskKey = getTaskKey(day.id, task.id);
+      const isCompleted = Boolean(completedTasks[taskKey]);
+      const typeLabel = task.type === "test" ? "Kontroldarbs" : "Mājasdarbs";
+
+      return `
+        <li class="task-item ${isCompleted ? "is-completed" : ""}">
+          <label>
+            <input
+              type="checkbox"
+              data-day-id="${day.id}"
+              data-task-id="${task.id}"
+              ${isCompleted ? "checked" : ""}
+            >
+            <span class="task-text">
+              <strong>${typeLabel}:</strong>
+              <span>${task.title}</span>
+            </span>
+            <span class="task-status">Izpildīts</span>
+          </label>
+        </li>
+      `;
+    }).join("");
+
+    return `
+      <div class="day-block tasks-block" data-tasks-day="${day.id}">
+        <h3>Dienas uzdevumi</h3>
+        <div class="task-panel">
+          <div class="task-counters" aria-label="${day.title} uzdevumu progress">
+            ${createTaskCounter("Kopā", "all", counts.all)}
+            ${createTaskCounter("Mājasdarbi", "homework", counts.homework)}
+            ${createTaskCounter("Kontroldarbi", "test", counts.test)}
+          </div>
+          <ul class="task-list">
+            ${items}
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
+  function updateTaskCounters(dayId) {
+    const taskBlock = document.querySelector(`[data-tasks-day="${dayId}"]`);
+    const counts = getTaskCounts(dayId);
+
+    Object.entries(counts).forEach(([name, count]) => {
+      const counter = taskBlock?.querySelector(`[data-task-counter="${name}"]`);
+      if (counter) {
+        counter.textContent = `${count.completed} / ${count.total}`;
+      }
+    });
+
+  }
+
+  function handleTaskChange(event) {
+    const checkbox = event.target.closest(".task-item input[type='checkbox']");
+
+    if (!checkbox) {
+      return;
+    }
+
+    const taskKey = getTaskKey(checkbox.dataset.dayId, checkbox.dataset.taskId);
+    completedTasks[taskKey] = checkbox.checked;
+    checkbox.closest(".task-item").classList.toggle("is-completed", checkbox.checked);
+    saveCompletedTasks(completedTasks);
+    updateTaskCounters(checkbox.dataset.dayId);
+    renderWeekTaskSummary();
   }
 
   function createDayCard(day) {
@@ -292,6 +439,8 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
 
+    timeline += createTasksBlock(day);
+
     section.innerHTML = `
       <div class="card-image-wrap">
         <img src="${image}" alt="${alt}" loading="lazy">
@@ -307,89 +456,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return section;
   }
 
-  function getBirthdayInfo(dateValue) {
-    const [month, day] = dateValue.split("-").map(Number);
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const birthday = new Date(currentYear, month - 1, day);
-    birthday.setHours(0, 0, 0, 0);
-    today.setHours(0, 0, 0, 0);
-
-    if (birthday < today) {
-      birthday.setFullYear(currentYear + 1);
-    }
-
-    const daysLeft = Math.round((birthday - today) / 86400000);
-    const formattedDate = birthday.toLocaleDateString("lv-LV", {
-      day: "numeric",
-      month: "long"
-    });
-
-    return { daysLeft, formattedDate };
-  }
-
-  function formatDaysLeft(daysLeft) {
-    if (daysLeft === 0) {
-      return "Šodien";
-    }
-
-    if (daysLeft === 1) {
-      return "Rīt";
-    }
-
-    return `Pēc ${daysLeft} dienām`;
-  }
-
-  function createBirthdayCard(item, birthday = getBirthdayInfo(item.date)) {
-    const article = document.createElement("article");
-    article.className = "schedule-card birthday-card";
-
-    article.innerHTML = `
-      <div class="schedule-card-body">
-        <p class="card-label">Dzimšanas diena</p>
-        <h3>${item.name}</h3>
-        <p class="card-subtitle">${birthday.formattedDate}</p>
-        <div class="birthday-badge">${formatDaysLeft(birthday.daysLeft)}</div>
-        <p>${item.note}</p>
-      </div>
-    `;
-
-    return article;
-  }
-
-  function createBirthdayEmptyCard() {
-    const article = document.createElement("article");
-    article.className = "schedule-card birthday-card birthday-empty";
-
-    article.innerHTML = `
-      <div class="schedule-card-body">
-        <p class="card-label">Dzimšanas dienas</p>
-        <h3>Nav tuvāko datumu</h3>
-        <p>Tuvākajās ${birthdayTrackingDays} dienās draugu dzimšanas dienas nav atrastas.</p>
-      </div>
-    `;
-
-    return article;
-  }
-
-  function renderBirthdayCards() {
-    const fragment = document.createDocumentFragment();
-    const upcomingBirthdays = birthdays
-      .map((item) => ({ item, birthday: getBirthdayInfo(item.date) }))
-      .filter(({ birthday }) => birthday.daysLeft <= birthdayTrackingDays)
-      .sort((first, second) => first.birthday.daysLeft - second.birthday.daysLeft);
-
-    if (upcomingBirthdays.length === 0) {
-      fragment.append(createBirthdayEmptyCard());
-    } else {
-      upcomingBirthdays.forEach(({ item, birthday }) => {
-        fragment.append(createBirthdayCard(item, birthday));
-      });
-    }
-
-    birthdayContainer.append(fragment);
-  }
-
   function renderCards() {
     const fragment = document.createDocumentFragment();
     days.forEach((day) => fragment.append(createDayCard(day)));
@@ -400,7 +466,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const links = [...document.querySelectorAll(".main-nav a")];
     const sections = [
       document.querySelector("#sakums"),
-      document.querySelector("#dzimsanas-dienas"),
       document.querySelector("#par-projektu"),
       ...days.map((day) => document.querySelector(`#${day.id}`))
     ];
@@ -427,10 +492,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
     setTheme(nextTheme);
   });
+  cardsContainer.addEventListener("change", handleTaskChange);
 
   setTheme(startTheme);
   createNav();
-  renderBirthdayCards();
+  renderWeekTaskSummary();
   renderCards();
   setActiveNavLink();
 });

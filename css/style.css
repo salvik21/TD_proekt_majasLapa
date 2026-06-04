@@ -40,8 +40,6 @@
 .header-layout > *,
 .brand > *,
 .intro > *,
-.section-heading > *,
-.schedule-card,
 .diary-card > *,
 .card-content,
 .day-block,
@@ -86,6 +84,37 @@ a {
   border-bottom: 1px solid var(--line);
   background: color-mix(in srgb, var(--surface) 92%, transparent);
   backdrop-filter: blur(14px);
+}
+
+.floating-task-progress {
+  position: fixed;
+  top: 50%;
+  left: 14px;
+  z-index: 9;
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  box-shadow: var(--shadow);
+  padding: 14px 12px;
+  backdrop-filter: blur(14px);
+  transform: translateY(-50%);
+}
+
+.floating-task-progress span {
+  display: grid;
+  gap: 2px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.floating-task-progress strong {
+  color: var(--accent);
+  font-size: 1rem;
 }
 
 .sr-only {
@@ -395,10 +424,40 @@ a {
   line-height: 1.1;
 }
 
-.intro p:last-child {
+.intro > p {
   margin: 0;
   color: var(--muted);
   font-size: 1.05rem;
+}
+
+.week-task-summary {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.week-summary-item {
+  display: grid;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 14px 16px;
+  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+}
+
+.week-summary-item strong {
+  color: var(--accent);
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+.week-summary-item span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
 .diary {
@@ -431,90 +490,6 @@ a {
 .about-project a {
   color: var(--accent);
   font-weight: 800;
-}
-
-.work-schedule {
-  padding-block: 18px 34px;
-  scroll-margin-top: 104px;
-}
-
-.section-heading {
-  display: grid;
-  grid-template-columns: minmax(240px, 0.72fr) 1fr;
-  gap: 28px;
-  align-items: end;
-  margin-bottom: 20px;
-}
-
-.section-heading h2 {
-  margin: 0;
-  font-size: clamp(1.7rem, 3vw, 2.35rem);
-  line-height: 1.1;
-}
-
-.section-heading p:last-child {
-  margin: 0;
-  color: var(--muted);
-}
-
-.schedule-cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.schedule-card {
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: var(--shadow);
-}
-
-.schedule-card > img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  background: var(--surface-soft);
-}
-
-.birthday-card {
-  display: flex;
-}
-
-.birthday-card .schedule-card-body {
-  width: 100%;
-}
-
-.birthday-empty {
-  grid-column: 1 / -1;
-}
-
-.schedule-card-body {
-  padding: 20px;
-}
-
-.schedule-card h3 {
-  margin: 0;
-  font-size: 1.32rem;
-  line-height: 1.15;
-}
-
-.schedule-card p:last-child {
-  margin: 16px 0 0;
-  color: var(--text);
-}
-
-.birthday-badge {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  background: var(--accent);
-  color: var(--surface);
-  font-size: 0.92rem;
-  font-weight: 800;
-  margin-top: 8px;
-  padding: 7px 12px;
 }
 
 .cards {
@@ -629,19 +604,6 @@ a {
   overflow-wrap: anywhere;
 }
 
-.recommendation-pill.is-best {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-  box-shadow: 0 8px 22px rgba(47, 111, 85, 0.18);
-}
-
-.recommendation-pill.is-best::before {
-  content: "Tagad";
-  color: var(--accent-strong);
-  font-size: 0.72rem;
-  font-weight: 900;
-}
-
 .recommendation-pill strong {
   color: var(--accent-strong);
   font-size: 0.92rem;
@@ -653,12 +615,111 @@ a {
   min-width: 28px;
   min-height: 24px;
   border-radius: 999px;
-  background: var(--accent);
-  color: var(--surface);
   font-style: normal;
   font-weight: 900;
   font-size: 0.82rem;
   padding: 2px 7px;
+}
+
+.recommendation-pill .route-blue {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.recommendation-pill .route-yellow {
+  background: #facc15;
+  color: #111827;
+}
+
+.task-panel {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+}
+
+.task-counters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  padding: 12px;
+}
+
+.task-counter {
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 6px 10px;
+}
+
+.task-counter strong {
+  color: var(--accent-strong);
+}
+
+.task-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.task-item:last-child {
+  border-bottom: 0;
+}
+
+.task-item label {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 13px 14px;
+}
+
+.task-item input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.task-text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+}
+
+.task-text strong {
+  color: var(--accent-strong);
+}
+
+.task-status {
+  display: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 4px 8px;
+}
+
+.task-item.is-completed .task-text {
+  color: var(--muted);
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+
+.task-item.is-completed .task-status {
+  display: inline-flex;
 }
 
 .table-wrap {
@@ -741,18 +802,36 @@ th {
 
   .intro,
   .about-project,
-  .section-heading,
   .diary-card {
     grid-template-columns: 1fr;
   }
 
-  .schedule-cards {
-    grid-template-columns: 1fr;
+  .week-task-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .card-image-wrap img {
     min-height: 300px;
     max-height: 360px;
+  }
+
+  .floating-task-progress {
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    border-left: 1px solid var(--line);
+    border-bottom: 4px solid var(--accent);
+    padding: 8px 12px;
+    transform: none;
+  }
+
+  .floating-task-progress span {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
   }
 }
 
@@ -869,6 +948,15 @@ th {
     padding: 20px;
   }
 
+  .task-item label {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .task-status {
+    grid-column: 2;
+    justify-self: start;
+  }
+
   table {
     min-width: min(340px, 100%);
   }
@@ -891,7 +979,10 @@ th {
     font-size: 2rem;
   }
 
-  .schedule-card-body,
+  .week-task-summary {
+    grid-template-columns: 1fr;
+  }
+
   .card-content {
     padding-inline: 16px;
   }
