@@ -942,6 +942,14 @@ th {
 }
 
 @media (max-width: 620px) {
+  html {
+    scroll-padding-top: 12px;
+  }
+
+  .site-header {
+    position: static;
+  }
+
   .container {
     width: min(100% - 22px, var(--container));
   }
