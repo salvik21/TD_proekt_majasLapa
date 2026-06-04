@@ -1066,9 +1066,15 @@ th {
   }
 
   .main-nav a[href="#sakums"] {
-    min-height: 52px;
-    background: url("../favicon/android-chrome-192x192.png") center / 48px 48px no-repeat;
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    justify-self: center;
+    border-radius: var(--radius);
+    background: var(--surface) url("../favicon/android-chrome-192x192.png") center / 36px 36px no-repeat;
     font-size: 0;
+    overflow: hidden;
+    padding: 0;
   }
 
   .main-nav a[href="#sakums"]::before {
@@ -1148,18 +1154,6 @@ th {
 }
 
 @media (max-width: 380px) {
-  .header-layout {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .theme-toggle {
-    justify-self: end;
-  }
-
-  .main-nav ul {
-    justify-content: flex-start;
-  }
-
   .hero h1 {
     font-size: 2rem;
   }
