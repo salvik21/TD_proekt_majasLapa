@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const navList = document.querySelector("#nav-list");
   const cardsContainer = document.querySelector("#cards");
   const weekTaskSummary = document.querySelector("#week-task-summary");
+  const floatingTaskProgress = document.querySelector("#floating-task-progress");
   const themeToggle = document.querySelector("#theme-toggle");
   const themeToggleLabel = document.querySelector("#theme-toggle-label");
   const days = Array.isArray(window.studyDays) ? window.studyDays : [];
@@ -210,6 +211,10 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="day-block">
         <h3>${title}</h3>
         <p class="recommendation-target">${targetText}</p>
+        <div class="transport-legend" aria-label="Transporta krāsu apzīmējumi">
+          <span><i class="route-yellow" aria-hidden="true"></i> autobuss</span>
+          <span><i class="route-blue" aria-hidden="true"></i> trolejbuss</span>
+        </div>
         <div class="recommendation-list" aria-label="${title}">
           ${items}
         </div>
@@ -245,19 +250,72 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     const homework = tasks.filter((task) => task.type === "homework");
     const tests = tasks.filter((task) => task.type === "test");
+    const homeworkCompleted = homework.filter(
+      (task) => completedTasks[getTaskKey(task.dayId, task.id)]
+    ).length;
+    const testsCompleted = tests.filter(
+      (task) => completedTasks[getTaskKey(task.dayId, task.id)]
+    ).length;
 
     return {
       homeworkTotal: homework.length,
-      homeworkRemaining: homework.filter(
-        (task) => !completedTasks[getTaskKey(task.dayId, task.id)]
-      ).length,
-      testsPast: tests.filter(
-        (task) => completedTasks[getTaskKey(task.dayId, task.id)]
-      ).length,
-      testsUpcoming: tests.filter(
-        (task) => !completedTasks[getTaskKey(task.dayId, task.id)]
-      ).length
+      homeworkCompleted,
+      homeworkRemaining: homework.length - homeworkCompleted,
+      testsTotal: tests.length,
+      testsPast: testsCompleted,
+      testsUpcoming: tests.length - testsCompleted,
+      allCompleted: homeworkCompleted + testsCompleted,
+      allTotal: homework.length + tests.length
     };
+  }
+
+  function createProgressButton(type, label, tasks) {
+    const completed = tasks.filter(
+      (task) => completedTasks[getTaskKey(task.dayId, task.id)]
+    ).length;
+    const segments = tasks.map((task, index) => {
+      const isCompleted = Boolean(completedTasks[getTaskKey(task.dayId, task.id)]);
+
+      return `
+        <button
+          class="floating-progress-segment ${isCompleted ? "is-completed" : ""}"
+          type="button"
+          data-task-target="task-${task.dayId}-${task.id}"
+          aria-label="${label} ${index + 1}: ${task.title}"
+          title="${task.title}"
+        ></button>
+      `;
+    }).join("");
+
+    return `
+      <div class="floating-progress-item">
+        <button class="floating-progress-label" type="button" data-progress-type="${type}">
+          <span>${label}</span>
+          <strong>${completed} / ${tasks.length}</strong>
+        </button>
+        <span class="floating-progress-track">
+          ${segments}
+        </span>
+      </div>
+    `;
+  }
+
+  function renderFloatingTaskProgress(counts) {
+    if (!floatingTaskProgress) {
+      return;
+    }
+
+    const allTasks = days.flatMap((day) =>
+      (dayTasks[day.id] || []).map((task) => ({ ...task, dayId: day.id }))
+    );
+    const homework = allTasks.filter((task) => task.type === "homework");
+    const tests = allTasks.filter((task) => task.type === "test");
+
+    floatingTaskProgress.innerHTML = `
+      <h2>Uzdevumu progress</h2>
+      ${createProgressButton("homework", "Mājasdarbi", homework)}
+      ${createProgressButton("test", "Kontroldarbi", tests)}
+    `;
   }
 
   function renderWeekTaskSummary() {
@@ -279,17 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <span>${item.label}</span>
       </div>
     `).join("");
-
-    const floatingHomework = document.querySelector('[data-floating-counter="homework"]');
-    const floatingTests = document.querySelector('[data-floating-counter="test"]');
-
-    if (floatingHomework) {
-      floatingHomework.textContent = `${counts.homeworkTotal - counts.homeworkRemaining}/${counts.homeworkTotal}`;
-    }
-
-    if (floatingTests) {
-      floatingTests.textContent = `${counts.testsPast}/${counts.testsPast + counts.testsUpcoming}`;
-    }
+    renderFloatingTaskProgress(counts);
   }
 
   function createTaskCounter(label, counterName, count) {
@@ -314,7 +362,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const typeLabel = task.type === "test" ? "Kontroldarbs" : "Mājasdarbs";
 
       return `
-        <li class="task-item ${isCompleted ? "is-completed" : ""}">
+        <li
+          class="task-item ${isCompleted ? "is-completed" : ""}"
+          id="task-${day.id}-${task.id}"
+          data-task-type="${task.type}"
+        >
           <label>
             <input
               type="checkbox"
@@ -377,6 +429,38 @@ document.addEventListener("DOMContentLoaded", () => {
     renderWeekTaskSummary();
   }
 
+  function handleProgressNavigation(event) {
+    const segment = event.target.closest("[data-task-target]");
+
+    if (segment) {
+      highlightTask(document.getElementById(segment.dataset.taskTarget));
+      return;
+    }
+
+    const button = event.target.closest("[data-progress-type]");
+
+    if (!button) {
+      return;
+    }
+
+    const type = button.dataset.progressType;
+    const selector = type === "all" ? ".task-item" : `.task-item[data-task-type="${type}"]`;
+    const tasks = [...document.querySelectorAll(selector)];
+    const target = tasks.find((task) => !task.classList.contains("is-completed")) || tasks[0];
+
+    highlightTask(target);
+  }
+
+  function highlightTask(target) {
+    if (!target) {
+      return;
+    }
+
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    target.classList.add("is-highlighted");
+    window.setTimeout(() => target.classList.remove("is-highlighted"), 1600);
+  }
+
   function createDayCard(day) {
     const section = document.createElement("section");
     section.className = "diary-card";
@@ -426,7 +510,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (hasWork) {
-      timeline += createTableBlock("Transports uz darbu", `${day.title} transports uz darbu`, day.transportToWork);
+      if (day.transportToWork && day.transportToWork.length > 0) {
+        const workStart = parseTimeToMinutes(day.work[0].time);
+        const target = workStart - 30;
+        const departures = findDepartures(transportSchedules.filter(isStudyRoute), target, 15);
+
+        timeline += createTransportRecommendationBlock(
+          "Transports uz darbu",
+          `Mērķis: pieturā ap ${formatMinutes(target)} (30 min pirms darba)`,
+          departures
+        );
+      }
+
       timeline += createTableBlock("Darba grafiks", `${day.title} darba grafiks`, day.work);
 
       const workEnd = parseTimeToMinutes(day.work[day.work.length - 1].time, true);
@@ -493,6 +588,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTheme(nextTheme);
   });
   cardsContainer.addEventListener("change", handleTaskChange);
+  floatingTaskProgress?.addEventListener("click", handleProgressNavigation);
 
   setTheme(startTheme);
   createNav();

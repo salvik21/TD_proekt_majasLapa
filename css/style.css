@@ -92,29 +92,90 @@ a {
   left: 14px;
   z-index: 9;
   display: grid;
-  gap: 12px;
+  width: 210px;
+  gap: 10px;
   border: 1px solid var(--line);
   border-left: 4px solid var(--accent);
   border-radius: var(--radius);
   background: color-mix(in srgb, var(--surface) 94%, transparent);
   box-shadow: var(--shadow);
-  padding: 14px 12px;
+  padding: 16px;
   backdrop-filter: blur(14px);
   transform: translateY(-50%);
 }
 
-.floating-task-progress span {
-  display: grid;
-  gap: 2px;
-  color: var(--muted);
-  font-size: 0.76rem;
-  font-weight: 800;
-  text-align: center;
+.floating-task-progress h2 {
+  margin: 0 0 4px;
+  color: var(--accent-strong);
+  font-size: 1rem;
+  line-height: 1.2;
 }
 
-.floating-task-progress strong {
+.floating-progress-item {
+  display: grid;
+  gap: 7px;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  color: var(--text);
+  padding: 10px;
+}
+
+.floating-progress-item:hover {
+  border-color: var(--accent);
+}
+
+.floating-progress-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-align: left;
+}
+
+.floating-progress-label strong {
   color: var(--accent);
-  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.floating-progress-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 3px;
+  height: 7px;
+  background: transparent;
+}
+
+.floating-progress-segment {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  cursor: pointer;
+  padding: 0;
+}
+
+.floating-progress-segment:hover,
+.floating-progress-segment:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: scaleY(1.7);
+}
+
+.floating-progress-segment.is-completed {
+  border-color: var(--accent);
+  background: var(--accent);
 }
 
 .sr-only {
@@ -581,6 +642,37 @@ a {
   font-weight: 700;
 }
 
+.transport-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.transport-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.transport-legend i {
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--text);
+  border-radius: 50%;
+}
+
+.transport-legend .route-blue {
+  background: #2563eb;
+}
+
+.transport-legend .route-yellow {
+  background: #facc15;
+}
+
 .recommendation-list {
   display: flex;
   flex-wrap: wrap;
@@ -672,6 +764,11 @@ a {
 
 .task-item:last-child {
   border-bottom: 0;
+}
+
+.task-item.is-highlighted {
+  background: var(--accent-soft);
+  box-shadow: inset 4px 0 0 var(--accent);
 }
 
 .task-item label {
@@ -780,6 +877,22 @@ th {
   outline-offset: 3px;
 }
 
+@media (max-width: 1480px) {
+  .floating-task-progress {
+    position: static;
+    width: min(100% - 32px, var(--container));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 24px auto 0;
+    border-left: 4px solid var(--accent);
+    padding: 14px;
+    transform: none;
+  }
+
+  .floating-task-progress h2 {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 920px) {
   .header-layout {
     grid-template-columns: 1fr auto;
@@ -815,24 +928,6 @@ th {
     max-height: 360px;
   }
 
-  .floating-task-progress {
-    top: auto;
-    right: 12px;
-    bottom: 12px;
-    left: 12px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    border-left: 1px solid var(--line);
-    border-bottom: 4px solid var(--accent);
-    padding: 8px 12px;
-    transform: none;
-  }
-
-  .floating-task-progress span {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-  }
 }
 
 @media (max-width: 620px) {
@@ -946,6 +1041,15 @@ th {
 
   .card-content {
     padding: 20px;
+  }
+
+  .floating-task-progress {
+    grid-template-columns: 1fr;
+    width: min(100% - 22px, var(--container));
+  }
+
+  .floating-task-progress h2 {
+    grid-column: auto;
   }
 
   .task-item label {
