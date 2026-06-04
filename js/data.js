@@ -5,7 +5,7 @@ window.studyDays = [
     subtitle: "Lekcijas un transports",
     imageCaption: "Smags pirmdienas rīts",
     image: "images/pirm.jpg",
-    alt: "Noguris Braians Grifins ar kafijas tasi",
+    alt: "Braians Grifins ar kafijas tasi",
     transportToStudy: [
       { time: "07:35", activity: "Autobuss līdz centram" },
       { time: "08:05", activity: "Trolejbuss līdz universitātei" },
@@ -56,7 +56,7 @@ window.studyDays = [
     subtitle: "Tīmekļa dizains un kultūras vēsture",
     imageCaption: "Trešdiena jau pusceļā uz nedēļas nogali",
     image: "images/tresd.jpg",
-    alt: "Noguris Braians Grifins turpina darbu",
+    alt: "Noguris Braians Grifins raud vannā",
     transportToStudy: [
       { time: "07:40", activity: "Autobuss līdz centram" },
       { time: "08:05", activity: "Trolejbuss līdz universitātei" },
@@ -101,7 +101,7 @@ window.studyDays = [
     subtitle: "Darba diena bez studijām",
     imageCaption: "Piektdiena = brīvdienu priekšnojauta",
     image: "images/piekd.jpg",
-    alt: "Priecīgs Braians Grifins dejo ar glāzi",
+    alt: "Priecīgs Braians Grifins dejo",
     transportToStudy: [],
     transportStudyHome: [],
     transportToWork: [
@@ -145,7 +145,7 @@ window.studyDays = [
     subtitle: "Darba maiņa un sagatavošanās jaunai nedēļai",
     imageCaption: "Svētdiena - sagatavošanās pirmdienai",
     image: "images/svetdie.jpg",
-    alt: "Skumjš un domīgs Braians Grifins",
+    alt: "Kliedz Braians Grifins",
     transportToStudy: [],
     transportStudyHome: [],
     transportToWork: [
