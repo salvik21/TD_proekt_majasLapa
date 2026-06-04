@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cardsContainer = document.querySelector("#cards");
   const weekTaskSummary = document.querySelector("#week-task-summary");
   const floatingTaskProgress = document.querySelector("#floating-task-progress");
+  const mobileBackToTop = document.querySelector(".mobile-back-to-top");
   const themeToggle = document.querySelector("#theme-toggle");
   const themeToggleLabel = document.querySelector("#theme-toggle-label");
   const days = Array.isArray(window.studyDays) ? window.studyDays : [];
@@ -65,6 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
       theme === "dark" ? "Pārslēgt gaišo tēmu" : "Pārslēgt tumšo tēmu"
     );
     themeToggleLabel.textContent = theme === "dark" ? "Gaišā tēma" : "Tumšā tēma";
+  }
+
+  function updateMobileBackToTop() {
+    mobileBackToTop?.classList.toggle("is-visible", window.scrollY > 160);
   }
 
   function createNav() {
@@ -577,8 +582,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   cardsContainer.addEventListener("change", handleTaskChange);
   floatingTaskProgress?.addEventListener("click", handleProgressNavigation);
+  window.addEventListener("scroll", updateMobileBackToTop, { passive: true });
 
   setTheme(startTheme);
+  updateMobileBackToTop();
   createNav();
   renderWeekTaskSummary();
   renderCards();

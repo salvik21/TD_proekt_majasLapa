@@ -178,6 +178,10 @@ a {
   background: var(--accent);
 }
 
+.mobile-back-to-top {
+  display: none;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -955,14 +959,50 @@ th {
   }
 
   .header-layout {
-    gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px 8px;
+    padding-block: 14px;
   }
 
-  .brand > span:last-child {
+  .brand {
     display: none;
   }
 
+  .mobile-back-to-top {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 20;
+    display: block;
+    width: 46px;
+    height: 46px;
+    border: 2px solid var(--surface);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .mobile-back-to-top.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .mobile-back-to-top img {
+    width: 100%;
+    height: 100%;
+    border-radius: calc(var(--radius) - 2px);
+    object-fit: cover;
+  }
+
   .theme-toggle {
+    grid-column: auto;
+    justify-self: center;
     width: 62px;
     height: 38px;
     max-width: 100%;
@@ -998,10 +1038,22 @@ th {
   }
 
   .main-nav a {
+    display: grid;
+    place-items: center;
+    min-height: 48px;
     min-width: 36px;
     padding: 8px 9px;
     font-size: 0.86rem;
     text-align: center;
+  }
+
+  .main-nav,
+  .main-nav ul {
+    display: contents;
+  }
+
+  .main-nav li {
+    min-width: 0;
   }
 
   .main-nav a[data-short] {
@@ -1011,6 +1063,16 @@ th {
   .main-nav a[data-short]::before {
     content: attr(data-short);
     font-size: 0.86rem;
+  }
+
+  .main-nav a[href="#sakums"] {
+    min-height: 52px;
+    background: url("../favicon/android-chrome-192x192.png") center / 48px 48px no-repeat;
+    font-size: 0;
+  }
+
+  .main-nav a[href="#sakums"]::before {
+    content: "";
   }
 
   .main-nav a.is-today::after {
