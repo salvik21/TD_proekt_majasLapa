@@ -211,15 +211,11 @@ a {
 }
 
 .brand-mark {
-  display: grid;
-  place-items: center;
   width: 42px;
   min-width: 42px;
   height: 42px;
   border-radius: var(--radius);
-  background: var(--accent);
-  color: var(--surface);
-  font-weight: 800;
+  object-fit: cover;
 }
 
 .brand strong,
@@ -525,6 +521,7 @@ a {
   padding-block: 18px 60px;
 }
 
+.project-description,
 .about-project {
   display: grid;
   grid-template-columns: minmax(240px, 0.72fr) 1fr;
@@ -534,10 +531,26 @@ a {
   padding-block: 8px 56px;
 }
 
+.project-description h2,
 .about-project h2 {
   margin: 0;
   font-size: clamp(1.55rem, 3vw, 2.15rem);
   line-height: 1.1;
+}
+
+.project-description-text {
+  border-left: 4px solid var(--accent);
+  background: var(--surface);
+  color: var(--muted);
+  padding: 18px 20px;
+}
+
+.project-description-text p {
+  margin: 0;
+}
+
+.project-description-text p + p {
+  margin-top: 16px;
 }
 
 .about-project p:last-child {
@@ -560,7 +573,6 @@ a {
 
 .diary-card {
   display: grid;
-  scroll-margin-top: 104px;
   grid-template-columns: minmax(260px, 0.92fr) 1.35fr;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -914,6 +926,7 @@ th {
   }
 
   .intro,
+  .project-description,
   .about-project,
   .diary-card {
     grid-template-columns: 1fr;

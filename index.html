@@ -4,13 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mana studiju nedēļa datorikā</title>
+  <link rel="icon" href="favicon/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+  <link rel="manifest" href="favicon/site.webmanifest">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header class="site-header">
     <div class="container header-layout">
       <a class="brand" href="#sakums" aria-label="Uz sākumu">
-        <span class="brand-mark">ED</span>
+        <img class="brand-mark" src="favicon/android-chrome-192x192.png" alt="" width="42" height="42">
         <span>
           <strong>Studenta dienasgrāmata</strong>
           <small>Datorikas nedēļa</small>
@@ -52,13 +57,38 @@
       </div>
       <p>
         Šajā lapā apkopota datorikas studenta nedēļa: lekcijas, transports starp mājām,
-        studijām un darbu, mājasdarbi, kontroldarbi un īsa noskaņa par katru dienu.
+        studijām un darbu, mājasdarbi, kontroldarbi, kā arī īsa katras dienas noskaņa attēlos.
       </p>
       <div class="week-task-summary" id="week-task-summary" aria-label="Nedēļas uzdevumu kopsavilkums"></div>
     </section>
 
     <section class="diary container" id="dienasgramata" aria-label="Studiju nedēļas dienas">
       <div id="cards" class="cards"></div>
+    </section>
+
+    <section class="project-description container" aria-labelledby="project-description-title">
+      <div>
+        <p class="eyebrow">Vietnes mērķis</p>
+        <h2 id="project-description-title">Personīgais nedēļas plānotājs</h2>
+      </div>
+      <div class="project-description-text">
+        <p>
+          Šī mājaslapa ir izveidota manai personīgai lietošanai, lai vienkāršotu ikdienas plānošanu
+          un labāk pārskatītu vienu studiju nedēļu. Šeit es apkopoju svarīgāko informāciju par savu
+          nedēļas ritmu: lekciju grafiku, transportu starp mājām, studijām un darbu, darba laiku,
+          mājasdarbus un kontroldarbus.
+        </p>
+        <p>
+          Lapa palīdz ātri saprast, kas konkrētajā dienā ir jāizdara, cikos jāiziet no mājām, kāds
+          transports ir piemērotākais un kādi uzdevumi vēl nav pabeigti. Mājasdarbu un kontroldarbu
+          interaktīvās atzīmes ir pievienotas gan praktiskai lietošanai, gan arī kā demonstrācijas
+          elements, lai parādītu, kā vietne var palīdzēt organizēt studenta ikdienu.
+        </p>
+        <p>
+          Katrai dienai ir pievienota arī īsa noskaņa attēlos, kas padara lapu vizuāli interesantāku
+          un vieglāk uztveramu.
+        </p>
+      </div>
     </section>
 
     <section class="about-project container" id="par-projektu" aria-labelledby="about-title">
@@ -69,6 +99,8 @@
       <p>
         Šī tīmekļa vietne ir studiju projekts. Lapā izmantotie attēli ir ņemti no
         <a href="https://www.pinterest.com/" target="_blank" rel="noopener">Pinterest</a>.
+        Vietnes ikona izveidota ar
+        <a href="https://favicon.io/favicon-generator/" target="_blank" rel="noopener">favicon.io favicon generatoru</a>.
         Visi materiāli šajā lapā izmantoti tikai informatīviem un mācību nolūkiem.
       </p>
     </section>
