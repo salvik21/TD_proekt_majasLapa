@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Расписание по числам</title>
+  <link rel="icon" href="favicon/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+  <link rel="manifest" href="favicon/site.webmanifest">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-layout">
+      <a class="brand" href="index.html" aria-label="На главную страницу">
+        <img class="brand-mark" src="favicon/android-chrome-192x192.png" alt="Инициалы Вячеслава Любимова VL" width="42" height="42">
+        <span>
+          <strong>Дневник студента</strong>
+          <small>Расписание по числам</small>
+        </span>
+      </a>
+
+      <nav class="main-nav" aria-label="Главная навигация">
+        <ul>
+          <li><a href="index.html" data-short="Глав">Главная</a></li>
+          <li><a class="is-active" href="schedule.html" data-short="Рас">Расписание</a></li>
+        </ul>
+      </nav>
+
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Переключить темную тему">
+        <span class="theme-toggle-track" aria-hidden="true">
+          <span class="theme-toggle-icon theme-toggle-sun">☀</span>
+          <span class="theme-toggle-icon theme-toggle-moon">☾</span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+        <span class="sr-only" id="theme-toggle-label">Темная тема</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-title container" aria-labelledby="month-title">
+      <p class="eyebrow">Рабочий график</p>
+      <h1 id="month-title">Расписание по числам</h1>
+    </section>
+
+    <section class="month-schedule container" id="month-schedule" aria-label="Расписание по числам месяца"></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 Вячеслав Любимов. Учебный проект электронного дневника студента.</p>
+    </div>
+  </footer>
+
+  <script src="js/work-schedules.js"></script>
+  <script src="js/month-schedule.js"></script>
+</body>
+</html>

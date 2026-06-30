@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="lv">
+<html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mana studiju nedēļa datorikā</title>
+  <title>Моя учебная неделя по информатике</title>
   <link rel="icon" href="favicon/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
@@ -14,95 +14,69 @@
 <body>
   <header class="site-header">
     <div class="container header-layout">
-      <a class="brand" href="#sakums" aria-label="Uz sākumu">
-        <img class="brand-mark" src="favicon/android-chrome-192x192.png" alt="Vjačeslava Ļubimova iniciāļi VL" width="42" height="42">
+      <a class="brand" href="#glavnaya" aria-label="К началу страницы">
+        <img class="brand-mark" src="favicon/android-chrome-192x192.png" alt="Инициалы Вячеслава Любимова VL" width="42" height="42">
         <span>
-          <strong>Studenta dienasgrāmata</strong>
-          <small>Datorikas nedēļa</small>
+          <strong>Дневник студента</strong>
+          <small>Неделя по информатике</small>
         </span>
       </a>
 
-      <nav class="main-nav" aria-label="Galvenā navigācija">
+      <nav class="main-nav" aria-label="Главная навигация">
         <ul id="nav-list"></ul>
       </nav>
 
-      <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Pārslēgt tumšo tēmu">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false" aria-label="Переключить темную тему">
         <span class="theme-toggle-track" aria-hidden="true">
           <span class="theme-toggle-icon theme-toggle-sun">☀</span>
           <span class="theme-toggle-icon theme-toggle-moon">☾</span>
           <span class="theme-toggle-thumb"></span>
         </span>
-        <span class="sr-only" id="theme-toggle-label">Tumšā tēma</span>
+        <span class="sr-only" id="theme-toggle-label">Темная тема</span>
       </button>
     </div>
   </header>
 
-  <a class="mobile-back-to-top" href="#sakums" aria-label="Atgriezties lapas sākumā">
+  <a class="mobile-back-to-top" href="#glavnaya" aria-label="Вернуться к началу страницы">
     <img src="favicon/android-chrome-192x192.png" alt="" width="42" height="42">
   </a>
 
-  <aside class="floating-task-progress" id="floating-task-progress" aria-label="Nedēļas uzdevumu progress"></aside>
-
   <main>
-    <section class="hero" id="sakums" aria-labelledby="hero-title">
-      <img class="hero-image" src="images/sakums.jpeg" alt="Divi monitori un portatīvais dators ar studiju informāciju">
+    <section class="hero" id="glavnaya" aria-labelledby="hero-title">
+      <img class="hero-image" src="images/sakums.jpeg" alt="Два монитора и ноутбук с учебной информацией">
       <div class="hero-content container">
-        <p class="eyebrow">Elektroniskā studenta dienasgrāmata</p>
-        <h1 id="hero-title">Mana studiju nedēļa datorikā</h1>
-        <p class="hero-subtitle">Nedēļas lekcijas, darbi, transports un uzdevumi vienā pārskatāmā lapā.</p>
-        <p class="author">Autors: Vjačeslavs Lubimovs</p>
+        <p class="eyebrow">Электронный дневник студента</p>
+        <h1 id="hero-title">Моя учебная неделя по информатике</h1>
+        <p class="hero-subtitle">Учебный и рабочий график недели на одной странице.</p>
+        <p class="author">Автор: Вячеслав Любимов</p>
       </div>
     </section>
 
     <section class="intro container" aria-labelledby="intro-title">
       <div>
-        <p class="eyebrow">Mana studiju nedēļa</p>
-        <h2 id="intro-title">Septiņas dienas, septiņi studiju stāsti</h2>
+        <p class="eyebrow">Моя неделя</p>
+        <h2 id="intro-title">Учеба и работа по дням недели</h2>
       </div>
       <p>
-        Šajā lapā apkopota datorikas studenta nedēļa: lekcijas, transports starp mājām,
-        studijām un darbu, mājasdarbi, kontroldarbi, kā arī īsa katras dienas noskaņa attēlos.
+        На этой странице собрана неделя студента по информатике: учебные занятия,
+        рабочие смены и краткое настроение каждого дня в изображениях.
       </p>
-      <div class="week-task-summary" id="week-task-summary" aria-label="Nedēļas uzdevumu kopsavilkums"></div>
     </section>
 
-    <section class="diary container" id="dienasgramata" aria-label="Studiju nedēļas dienas">
+    <section class="diary container" id="dnevnik" aria-label="Дни учебной недели">
       <div id="cards" class="cards"></div>
-    </section>
-
-    <section class="project-description container" id="par-projektu" aria-labelledby="project-description-title">
-      <div>
-        <p class="eyebrow">Vietnes mērķis</p>
-        <h2 id="project-description-title">Personīgais nedēļas plānotājs</h2>
-      </div>
-      <div class="project-description-text">
-        <p>
-          Šī mājaslapa ir izveidota kā elektroniska studenta dienasgrāmata, kurā apkopota mana viena
-          studiju nedēļa datorikā. Tās mērķis ir parādīt, kā tiek plānota ikdiena, apvienojot studijas,
-          darbu, transportu, mājasdarbus un brīvo laiku.
-        </p>
-        <p>
-          Lapā ir pieejama informācija par katru nedēļas dienu: īss dienas apraksts, attēls, uzdevumu
-          progress, mājasdarbu un kontroldarbu skaits, kā arī transporta un laika plānošanas elementi.
-          Tas palīdz ātri saprast, kas konkrētajā dienā ir jāizdara un kā tiek organizēts studenta
-          ikdienas ritms.
-        </p>
-        <p>
-          Interaktīvie elementi, piemēram, uzdevumu atzīmes un dienu navigācija, padara mājaslapu
-          praktiskāku un ērtāk lietojamu. Katrai dienai pievienotie attēli palīdz labāk uztvert
-          noskaņu un padara lapu vizuāli interesantāku.
-        </p>
-      </div>
     </section>
 
   </main>
 
   <footer class="site-footer">
     <div class="container">
-      <p>&copy; 2026 Vjačeslavs Lubimovs. Mācību projekts elektroniskai studenta dienasgrāmatai.</p>
+      <p>&copy; 2026 Вячеслав Любимов. Учебный проект электронного дневника студента.</p>
     </div>
   </footer>
 
+  <script src="js/schedules.js"></script>
+  <script src="js/work-schedules.js"></script>
   <script src="js/data.js"></script>
   <script src="js/script.js"></script>
 </body>
