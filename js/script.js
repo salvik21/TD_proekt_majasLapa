@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const homeItem = document.createElement("li");
     const homeLink = document.createElement("a");
-    homeLink.href = "#glavnaya";
+    homeLink.href = "#page-top";
     homeLink.textContent = "Главная";
     homeLink.dataset.short = "Глав";
     homeItem.append(homeLink);
@@ -182,7 +182,17 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderCards() {
     navObserver?.disconnect();
     days = window.getStudyDays(selectedWeek);
-    document.querySelector("#week-label").textContent = `${days[0].dateLabel} — ${days[6].dateLabel} ${days[6].date.getFullYear()}`;
+    const first = days[0].date;
+    const last = days[6].date;
+    const month = date => String(date.getMonth() + 1).padStart(2, "0");
+    const label = document.querySelector("#week-label");
+    if (first.getFullYear() !== last.getFullYear()) {
+      label.textContent = `${first.getDate()}.${month(first)}.${first.getFullYear()}–${last.getDate()}.${month(last)}.${last.getFullYear()}`;
+    } else {
+      label.textContent = `${first.getDate()}${first.getMonth() === last.getMonth() ? "" : `.${month(first)}`}–${last.getDate()}.${month(last)}`;
+    }
+    label.setAttribute("aria-label", `${first.toLocaleDateString("ru-RU")} — ${last.toLocaleDateString("ru-RU")}`);
+    label.title = `${first.toLocaleDateString("ru-RU")} — ${last.toLocaleDateString("ru-RU")}`;
     const fragment = document.createDocumentFragment();
     days.forEach((day) => fragment.append(createDayCard(day)));
     cardsContainer.replaceChildren(fragment);
@@ -203,7 +213,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         links.forEach((link) => link.classList.remove("is-active"));
-        const activeLink = links.find((link) => link.getAttribute("href") === `#${entry.target.id}`);
+        const targetId = entry.target.id === "glavnaya" ? "page-top" : entry.target.id;
+        const activeLink = links.find((link) => link.getAttribute("href") === `#${targetId}`);
         activeLink?.classList.add("is-active");
       });
     }, {

@@ -11,16 +11,16 @@
   <link rel="manifest" href="favicon/site.webmanifest">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body id="page-top">
   <header class="site-header">
     <div class="container header-layout">
-      <a class="brand" href="#glavnaya" aria-label="К началу страницы">
+      <button class="brand menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-menu">
         <img class="brand-mark" src="favicon/android-chrome-192x192.png" alt="Инициалы Вячеслава Любимова VL" width="42" height="42">
         <span>
           <strong>Дневник студента</strong>
           <small>Неделя по информатике</small>
         </span>
-      </a>
+      </button>
 
       <nav class="main-nav" aria-label="Главная навигация">
         <ul id="nav-list"></ul>
@@ -37,9 +37,11 @@
     </div>
   </header>
 
-  <a class="mobile-back-to-top" href="#glavnaya" aria-label="Вернуться к началу страницы">
+  <button class="mobile-back-to-top menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-menu">
     <img src="favicon/android-chrome-192x192.png" alt="" width="42" height="42">
-  </a>
+  </button>
+
+  <nav class="site-menu" id="site-menu" aria-label="Меню сайта" hidden></nav>
 
   <main>
     <section class="container today-summary" id="today-summary" aria-labelledby="today-title"></section>
@@ -64,7 +66,7 @@
     </section>
 
     <section class="diary container" id="dnevnik" aria-label="Дни учебной недели">
-      <div class="period-controls" aria-label="Выбор недели">
+      <div class="period-controls week-controls" aria-label="Выбор недели">
         <button type="button" id="week-prev" aria-label="Предыдущая неделя">←</button>
         <strong id="week-label" aria-live="polite"></strong>
         <button type="button" id="week-next" aria-label="Следующая неделя">→</button>
@@ -86,5 +88,6 @@
   <script src="js/data.js"></script>
   <script src="js/today.js"></script>
   <script src="js/script.js"></script>
+  <script src="js/menu.js"></script>
 </body>
 </html>

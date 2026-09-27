@@ -11,16 +11,16 @@
   <link rel="manifest" href="favicon/site.webmanifest">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body id="page-top">
   <header class="site-header">
     <div class="container header-layout">
-      <a class="brand" href="index.html" aria-label="На главную страницу">
+      <button class="brand menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="site-menu">
         <img class="brand-mark" src="favicon/android-chrome-192x192.png" alt="Инициалы Вячеслава Любимова VL" width="42" height="42">
         <span>
           <strong>Дневник студента</strong>
           <small>Расписание по числам</small>
         </span>
-      </a>
+      </button>
 
       <nav class="main-nav" aria-label="Главная навигация">
         <ul>
@@ -39,6 +39,8 @@
       </button>
     </div>
   </header>
+
+  <nav class="site-menu" id="site-menu" aria-label="Меню сайта" hidden></nav>
 
   <main>
     <section class="container today-summary" id="today-summary" aria-labelledby="today-title"></section>
@@ -73,5 +75,6 @@
   <script src="js/data.js"></script>
   <script src="js/today.js"></script>
   <script src="js/month-schedule.js"></script>
+  <script src="js/menu.js"></script>
 </body>
 </html>
