@@ -171,7 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="card-content">
         <h2 id="${day.id}-title">${day.title}</h2>
         <p class="card-date">${day.dateLabel}</p>
-        <p class="card-subtitle">${day.subtitle}</p>
         ${timeline}
       </div>
     `;
