@@ -41,12 +41,25 @@
   </header>
 
   <main>
+    <section class="container today-summary" id="today-summary" aria-labelledby="today-title"></section>
     <section class="page-title container" aria-labelledby="month-title">
-      <p class="eyebrow">Рабочий график</p>
+      <p class="eyebrow">Учеба и работа</p>
       <h1 id="month-title">Расписание по числам</h1>
     </section>
 
-    <section class="month-schedule container" id="month-schedule" aria-label="Расписание по числам месяца"></section>
+    <section class="container weekly-study" aria-labelledby="study-title">
+      <h2 id="study-title">Учебный график</h2>
+      <p>Повторяется каждую неделю. Время и аудитории указаны для каждого занятия.</p>
+      <div id="weekly-study"></div>
+    </section>
+
+    <div class="container period-controls" aria-label="Выбор месяца">
+      <button type="button" id="month-prev" aria-label="Предыдущий месяц">←</button>
+      <strong id="month-label" aria-live="polite"></strong>
+      <button type="button" id="month-next" aria-label="Следующий месяц">→</button>
+      <button type="button" id="month-current">Текущий месяц</button>
+    </div>
+    <section class="month-schedule container" id="month-schedule" aria-label="Рабочий график по числам месяца"></section>
   </main>
 
   <footer class="site-footer">
@@ -55,7 +68,10 @@
     </div>
   </footer>
 
+  <script src="js/study-schedules.js"></script>
   <script src="js/work-schedules.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/today.js"></script>
   <script src="js/month-schedule.js"></script>
 </body>
 </html>

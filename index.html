@@ -42,8 +42,8 @@
   </a>
 
   <main>
+    <section class="container today-summary" id="today-summary" aria-labelledby="today-title"></section>
     <section class="hero" id="glavnaya" aria-labelledby="hero-title">
-      <img class="hero-image" src="images/sakums.jpeg" alt="Два монитора и ноутбук с учебной информацией">
       <div class="hero-content container">
         <p class="eyebrow">Электронный дневник студента</p>
         <h1 id="hero-title">Моя учебная неделя по информатике</h1>
@@ -59,11 +59,17 @@
       </div>
       <p>
         На этой странице собрана неделя студента по информатике: учебные занятия,
-        рабочие смены и краткое настроение каждого дня в изображениях.
+        рабочие смены по дням недели. Учебное расписание повторяется каждую неделю.
       </p>
     </section>
 
     <section class="diary container" id="dnevnik" aria-label="Дни учебной недели">
+      <div class="period-controls" aria-label="Выбор недели">
+        <button type="button" id="week-prev" aria-label="Предыдущая неделя">←</button>
+        <strong id="week-label" aria-live="polite"></strong>
+        <button type="button" id="week-next" aria-label="Следующая неделя">→</button>
+        <button type="button" id="week-current">Текущая неделя</button>
+      </div>
       <div id="cards" class="cards"></div>
     </section>
 
@@ -75,9 +81,10 @@
     </div>
   </footer>
 
-  <script src="js/schedules.js"></script>
+  <script src="js/study-schedules.js"></script>
   <script src="js/work-schedules.js"></script>
   <script src="js/data.js"></script>
+  <script src="js/today.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>

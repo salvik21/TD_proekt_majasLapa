@@ -316,34 +316,18 @@ a {
 .hero {
   position: relative;
   scroll-margin-top: 104px;
-  min-height: 560px;
+  min-height: 0;
   display: grid;
   align-items: end;
   overflow: hidden;
   border-bottom: 1px solid var(--line);
 }
 
-.hero-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.42) saturate(0.98);
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.72));
-}
-
 .hero-content {
   position: relative;
   z-index: 1;
-  padding-block: 120px 74px;
-  color: #ffffff;
+  padding-block: 64px;
+  color: var(--text);
 }
 
 .eyebrow,
@@ -357,7 +341,7 @@ a {
 }
 
 .hero .eyebrow {
-  color: #f1c38d;
+  color: var(--accent-strong);
 }
 
 .hero h1 {
@@ -415,6 +399,72 @@ a {
   color: var(--muted);
   font-size: 1.05rem;
 }
+
+.today-summary {
+  margin-block: 28px;
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.today-summary h2 { margin-top: 0; }
+.today-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 24px;
+}
+.today-grid h3 { color: var(--accent-strong); margin-top: 0; }
+.today-grid p { overflow-wrap: anywhere; }
+.schedule-note { color: var(--muted); font-size: 0.9rem; }
+.period-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.period-controls button {
+  font: inherit;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+}
+.period-controls button:hover { border-color: var(--accent-strong); }
+.period-controls button:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 3px; }
+
+.weekly-study {
+  margin-bottom: 40px;
+}
+
+#weekly-study {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.study-week-day {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.study-week-day h3 { margin: 0 0 12px; }
+.study-week-day p { color: var(--muted); }
+.study-week-day ul { list-style: none; padding: 0; margin: 0; }
+.study-week-day li { display: grid; gap: 6px; padding: 12px 0; }
+.study-week-day li + li { border-top: 1px solid var(--line); }
+.study-week-day strong { color: var(--accent-strong); }
+.study-week-day span { overflow-wrap: anywhere; }
 
 .month-schedule {
   display: grid;
@@ -524,27 +574,12 @@ a {
 
 .diary-card {
   display: grid;
-  grid-template-columns: minmax(260px, 0.92fr) 1.35fr;
+  grid-template-columns: 1fr;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: var(--shadow);
-}
-
-.card-image-wrap {
-  display: grid;
-  place-items: center;
-  min-height: 100%;
-  background: #ffffff;
-}
-
-.card-image-wrap img {
-  width: 100%;
-  height: 100%;
-  min-height: 360px;
-  object-fit: contain;
-  object-position: center;
 }
 
 .card-content {
@@ -701,18 +736,9 @@ th {
     justify-content: center;
   }
 
-  .hero {
-    min-height: 500px;
-  }
-
   .intro,
   .diary-card {
     grid-template-columns: 1fr;
-  }
-
-  .card-image-wrap img {
-    min-height: 300px;
-    max-height: 360px;
   }
 
 }
@@ -863,10 +889,6 @@ th {
     border-radius: 50%;
   }
 
-  .hero {
-    min-height: 430px;
-  }
-
   .hero h1 {
     font-size: clamp(2rem, 11vw, 3rem);
     line-height: 1.04;
@@ -878,7 +900,7 @@ th {
   }
 
   .hero-content {
-    padding-block: 92px 44px;
+    padding-block: 40px;
   }
 
   .intro {
@@ -891,11 +913,6 @@ th {
 
   .cards {
     gap: 18px;
-  }
-
-  .card-image-wrap img {
-    min-height: 220px;
-    max-height: 260px;
   }
 
   .card-content {

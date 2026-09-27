@@ -4,7 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileBackToTop = document.querySelector(".mobile-back-to-top");
   const themeToggle = document.querySelector("#theme-toggle");
   const themeToggleLabel = document.querySelector("#theme-toggle-label");
-  const days = Array.isArray(window.studyDays) ? window.studyDays : [];
+  let days = window.getStudyDays();
+  let selectedWeek = new Date();
+  let navObserver;
 
   function readSavedTheme() {
     try {
@@ -133,16 +135,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const hasStudy = day.study && day.study.length > 0;
     const hasWork = day.work && day.work.length > 0;
     const hasVacation = Boolean(day.isVacation);
-    const image = hasStudy || hasWork || hasVacation ? day.image : "images/weekend.jpg";
-    const alt = hasStudy || hasWork || hasVacation ? day.alt : "Изображение свободного дня без учебы и работы";
 
     let timeline = "";
 
     if (!hasStudy && !hasWork && !hasVacation) {
       timeline = `
         <div class="free-day">
-          <strong>Свободный день</strong>
-          <span>В этот день нет учебного и рабочего графика.</span>
+          <strong>Нет учебных занятий</strong>
+          <span>${window.hasWorkData(day.date) ? "Рабочей смены нет." : "Рабочий график на этот месяц еще не добавлен."}</span>
         </div>
       `;
     }
@@ -163,13 +163,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hasWork) {
       timeline += createTableBlock("Рабочий график", `${day.title}: рабочий график`, day.work);
     }
+    if (hasStudy && !window.hasWorkData(day.date)) {
+      timeline += `<p class="schedule-note">Рабочий график на этот месяц еще не добавлен.</p>`;
+    }
 
     section.innerHTML = `
-      <div class="card-image-wrap">
-        <img src="${image}" alt="${alt}" loading="lazy">
-      </div>
       <div class="card-content">
-        <p class="card-label">День недели</p>
         <h2 id="${day.id}-title">${day.title}</h2>
         <p class="card-date">${day.dateLabel}</p>
         <p class="card-subtitle">${day.subtitle}</p>
@@ -181,9 +180,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderCards() {
+    navObserver?.disconnect();
+    days = window.getStudyDays(selectedWeek);
+    document.querySelector("#week-label").textContent = `${days[0].dateLabel} — ${days[6].dateLabel} ${days[6].date.getFullYear()}`;
     const fragment = document.createDocumentFragment();
     days.forEach((day) => fragment.append(createDayCard(day)));
-    cardsContainer.append(fragment);
+    cardsContainer.replaceChildren(fragment);
+    setActiveNavLink();
   }
 
   function setActiveNavLink() {
@@ -193,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ...days.map((day) => document.querySelector(`#${day.id}`))
     ];
 
-    const observer = new IntersectionObserver((entries) => {
+    navObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) {
           return;
@@ -208,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
       threshold: 0.01
     });
 
-    sections.filter(Boolean).forEach((section) => observer.observe(section));
+    sections.filter(Boolean).forEach((section) => navObserver.observe(section));
   }
 
   themeToggle.addEventListener("click", () => {
@@ -216,10 +219,21 @@ document.addEventListener("DOMContentLoaded", () => {
     setTheme(nextTheme);
   });
   window.addEventListener("scroll", updateMobileBackToTop, { passive: true });
+  document.querySelector("#week-prev").addEventListener("click", () => {
+    selectedWeek.setDate(selectedWeek.getDate() - 7);
+    renderCards();
+  });
+  document.querySelector("#week-next").addEventListener("click", () => {
+    selectedWeek.setDate(selectedWeek.getDate() + 7);
+    renderCards();
+  });
+  document.querySelector("#week-current").addEventListener("click", () => {
+    selectedWeek = new Date();
+    renderCards();
+  });
 
   setTheme(startTheme);
   updateMobileBackToTop();
   createNav();
   renderCards();
-  setActiveNavLink();
 });

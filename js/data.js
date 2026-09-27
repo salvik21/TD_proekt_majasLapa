@@ -57,7 +57,7 @@ const dayInfo = [
   }
 ];
 
-const vacationMode = true;
+const vacationMode = false;
 
 const dayIndexById = {
   ponedelnik: 1,
@@ -69,8 +69,7 @@ const dayIndexById = {
   voskresenye: 0
 };
 
-function getDateForWeekday(dayId) {
-  const today = new Date();
+function getDateForWeekday(dayId, today = new Date()) {
   const currentDay = today.getDay();
   const targetDay = dayIndexById[dayId];
   const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay;
@@ -82,18 +81,14 @@ function getDateForWeekday(dayId) {
   return date;
 }
 
-function getWorkScheduleForDate(date) {
-  const period = window.workSchedulePeriod || {};
-  const isSelectedPeriod =
-    date.getFullYear() === period.year &&
-    date.getMonth() + 1 === period.month;
-
-  if (!isSelectedPeriod) {
-    return [];
-  }
-
-  return window.workSchedules?.[date.getDate()] || [];
+function getWorkMonthKey(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
+
+function getWorkScheduleForDate(date) {
+  return window.workSchedulesByMonth?.[getWorkMonthKey(date)]?.[date.getDate()] || [];
+}
+window.getWorkScheduleForDate = getWorkScheduleForDate;
 
 function formatDateLabel(date) {
   return date.toLocaleDateString("ru-RU", {
@@ -102,9 +97,9 @@ function formatDateLabel(date) {
   });
 }
 
-window.studyDays = dayInfo.map((day) => {
+window.getStudyDays = (reference = new Date()) => dayInfo.map((day) => {
   const studySchedule = window.studySchedules?.[day.id] || {};
-  const date = getDateForWeekday(day.id);
+  const date = getDateForWeekday(day.id, reference);
 
   return {
     ...day,
@@ -115,3 +110,31 @@ window.studyDays = dayInfo.map((day) => {
     work: getWorkScheduleForDate(date)
   };
 });
+window.studyDays = window.getStudyDays();
+
+window.hasWorkData = (date) => Boolean(window.workSchedulesByMonth?.[getWorkMonthKey(date)]);
+
+window.getDayEvents = (date) => {
+  const day = window.getStudyDays(date).find(item => item.date.getDay() === date.getDay());
+  return [...day.study.map(item => ({ ...item, kind: "Учеба" })),
+    ...day.work.map(item => ({ ...item, kind: "Работа" }))].map(item => {
+    const match = item.time.match(/^(\d{2}):(\d{2})-(\d{2}):(\d{2})$/);
+    if (!match) return { ...item, start: null, end: null };
+    const start = new Date(date);
+    const end = new Date(date);
+    start.setHours(+match[1], +match[2], 0, 0);
+    end.setHours(+match[3], +match[4], 0, 0);
+    if (end <= start) end.setDate(end.getDate() + 1);
+    return { ...item, start, end };
+  }).sort((a, b) => (a.start?.getTime() ?? Infinity) - (b.start?.getTime() ?? Infinity));
+};
+
+window.getNextEvent = (now = new Date()) => {
+  const events = [];
+  for (let offset = -1; offset <= 7; offset++) {
+    const date = new Date(now);
+    date.setDate(date.getDate() + offset);
+    events.push(...window.getDayEvents(date).filter(item => item.end && item.end > now));
+  }
+  return events.sort((a, b) => a.start - b.start)[0] || null;
+};

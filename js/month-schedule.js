@@ -3,8 +3,45 @@ document.addEventListener("DOMContentLoaded", () => {
   const monthSchedule = document.querySelector("#month-schedule");
   const themeToggle = document.querySelector("#theme-toggle");
   const themeToggleLabel = document.querySelector("#theme-toggle-label");
-  const period = window.workSchedulePeriod || {};
-  const schedules = window.workSchedules || {};
+  const now = new Date();
+  const period = { year: now.getFullYear(), month: now.getMonth() + 1 };
+
+  function renderStudyWeek() {
+    const container = document.querySelector("#weekly-study");
+    if (!container) return;
+    const weekdays = [
+      ["ponedelnik", "Понедельник"], ["vtornik", "Вторник"],
+      ["sreda", "Среда"], ["chetverg", "Четверг"],
+      ["pyatnica", "Пятница"], ["subbota", "Суббота"],
+      ["voskresenye", "Воскресенье"]
+    ];
+    weekdays.forEach(([id, title]) => {
+      const section = document.createElement("section");
+      section.className = "study-week-day";
+      const heading = document.createElement("h3");
+      heading.textContent = title;
+      section.append(heading);
+      const lessons = window.studySchedules?.[id]?.study || [];
+      if (lessons.length) {
+        const list = document.createElement("ul");
+        lessons.forEach((lesson) => {
+          const item = document.createElement("li");
+          const time = document.createElement("strong");
+          time.textContent = lesson.time;
+          const activity = document.createElement("span");
+          activity.textContent = lesson.activity;
+          item.append(time, activity);
+          list.append(item);
+        });
+        section.append(list);
+      } else {
+        const empty = document.createElement("p");
+        empty.textContent = "Нет учебных занятий";
+        section.append(empty);
+      }
+      container.append(section);
+    });
+  }
 
   function readSavedTheme() {
     try {
@@ -58,7 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function createDayCell(date) {
     const isCurrentMonth = date.getFullYear() === period.year && date.getMonth() + 1 === period.month;
     const dayNumber = date.getDate();
-    const items = isCurrentMonth ? schedules[dayNumber] || [] : [];
+    const hasWorkData = window.hasWorkData(date);
+    const items = isCurrentMonth ? window.getWorkScheduleForDate(date) : [];
     const hasItems = items.length > 0;
     const today = new Date();
     const classes = [
@@ -74,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ${
           isCurrentMonth && hasItems
             ? `<ul>${items.map((item) => `<li>${item.time}</li>`).join("")}</ul>`
-            : isCurrentMonth ? `<p>Выходной</p>` : ""
+            : isCurrentMonth ? `<p>${hasWorkData ? "Выходной" : "—"}</p>` : ""
         }
       </article>
     `;
@@ -103,7 +141,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     monthTitle.textContent = `Расписание на ${getMonthName(period.year, period.month)}`;
+    document.querySelector("#month-label").textContent = getMonthName(period.year, period.month);
     monthSchedule.innerHTML = `
+      <h2>Рабочий график</h2>
+      ${window.hasWorkData(new Date(period.year, period.month - 1, 1)) ? "" : '<p class="schedule-note">Рабочий график на этот месяц еще не добавлен. Учебные занятия повторяются по расписанию выше.</p>'}
       <div class="calendar-weekdays" aria-hidden="true">
         ${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map((day) => `<span>${day}</span>`).join("")}
       </div>
@@ -120,5 +161,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
     setTheme(nextTheme);
   });
+  function changeMonth(offset) {
+    const date = new Date(period.year, period.month - 1 + offset, 1);
+    period.year = date.getFullYear();
+    period.month = date.getMonth() + 1;
+    renderMonth();
+  }
+  document.querySelector("#month-prev").addEventListener("click", () => changeMonth(-1));
+  document.querySelector("#month-next").addEventListener("click", () => changeMonth(1));
+  document.querySelector("#month-current").addEventListener("click", () => {
+    const today = new Date();
+    period.year = today.getFullYear();
+    period.month = today.getMonth() + 1;
+    renderMonth();
+  });
+  renderStudyWeek();
   renderMonth();
 });
