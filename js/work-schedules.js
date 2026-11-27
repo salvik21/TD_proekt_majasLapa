@@ -95,7 +95,7 @@ window.workSchedulesByMonth = {
   28: [{ time: "15:00-23:00" }],
   29: [{ time: "15:00-23:00" }],
   30: [{ time: "BD" }]
-}
+},
 "2026-12": {
   1: [{ time: "BD" }],
   2: [{ time: "BD" }],
